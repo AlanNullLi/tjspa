@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import firebase from './firebase.js';
+import firebase, { auth, provider } from './firebase.js';
 import { Input, Card } from 'antd';
 
 //student will have a name, age, and class field
@@ -22,12 +22,15 @@ class App extends React.Component {
       students: [],
       teachers: [],
       classes: [],
+      user: null,
     }
     //I think these all need to be binded since I am writing methods like normal java and no arrows
     this.handleInput = this.handleInput.bind(this);
     this.handleEnroll = this.handleEnroll.bind(this);
     this.handleAddTeacher = this.handleAddTeacher.bind(this);
     this.handleAddClass = this.handleAddClass.bind(this);
+    this.login = this.login.bind(this);
+    this.logout = this.logout.bind(this);
   }
 
   //handles the input and assigns to state
@@ -101,6 +104,24 @@ class App extends React.Component {
     }
   }
 
+  login() {
+    auth.signInWithPopup(provider)
+      .then((result) => {
+        const user = result.user;
+        this.setState({
+          user
+        })
+      })
+  }
+  logout() {
+    auth.signOut()
+      .then(() => {
+        this.setState({
+          user: null
+        })
+      })
+  }
+
   //handles all the pulling from firebase
   componentDidMount() {
     //gets the data from all three type arrays
@@ -154,6 +175,12 @@ class App extends React.Component {
         classes: stateClasses
       })
     })
+    //this makes the log in stay even on refresh until logout
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        this.setState({ user })
+      }
+    })
   }
 
   render() {
@@ -162,52 +189,66 @@ class App extends React.Component {
       <div className='app'>
         <header>Welcome to Thomas Jefferson Elementary!</header>
         <div>
-          Enroll New Student
-           <form onSubmit={this.handleEnroll}>
-            <Input
-              name='currentName'
-              placeholder='enter student name'
-              value={this.state.currentName}
-              onChange={this.handleInput}
-            />
-            <Input
-              name="currentAge"
-              placeholder='enter student age'
-              value={this.state.currentAge}
-              onChange={this.handleInput}
-            />
-            <Input
-              name="currentClass"
-              placeholder='assigned class'
-              value={this.state.currentClass}
-              onChange={this.handleInput}
-            />
-            <button >Enroll Student</button>
-          </form>
-          <form onSubmit={this.handleAddTeacher}>
-            <Input
-              name='newTeacherN'
-              placeholder='new teacher name'
-              value={this.state.newTeacherN}
-              onChange={this.handleInput}
-            />
-            <Input
-              name='newTeacherC'
-              placeholder="teacher's class"
-              value={this.state.newTeacherC}
-              onChange={this.handleInput}
-            />
-            <button>Add New Teacher</button>
-          </form>
-          <form onSubmit={this.handleAddClass}>
-            <Input
-              name='newClass'
-              placeholder='new class'
-              value={this.state.newClass}
-              onChange={this.handleInput}
-            />
-            <button>Add New Class</button>
-          </form>
+          <h6>Log in here</h6>
+          {this.state.user ?
+            <button onClick={this.logout}>Log out</button>
+            :
+            <button onClick={this.login}>Log in</button>
+          }
+        </div>
+        <div>
+          {this.state.user ?
+            <div>
+              Enroll New Student
+              <form onSubmit={this.handleEnroll}>
+                <Input
+                  name='currentName'
+                  placeholder='enter student name'
+                  value={this.state.currentName}
+                  onChange={this.handleInput}
+                />
+                <Input
+                  name="currentAge"
+                  placeholder='enter student age'
+                  value={this.state.currentAge}
+                  onChange={this.handleInput}
+                />
+                <Input
+                  name="currentClass"
+                  placeholder='assigned class'
+                  value={this.state.currentClass}
+                  onChange={this.handleInput}
+                />
+                <button >Enroll Student</button>
+              </form>
+              <form onSubmit={this.handleAddTeacher}>
+                <Input
+                  name='newTeacherN'
+                  placeholder='new teacher name'
+                  value={this.state.newTeacherN}
+                  onChange={this.handleInput}
+                />
+                <Input
+                  name='newTeacherC'
+                  placeholder="teacher's class"
+                  value={this.state.newTeacherC}
+                  onChange={this.handleInput}
+                />
+                <button>Add New Teacher</button>
+              </form>
+              <form onSubmit={this.handleAddClass}>
+                <Input
+                  name='newClass'
+                  placeholder='new class'
+                  value={this.state.newClass}
+                  onChange={this.handleInput}
+                />
+                <button>Add New Class</button>
+              </form>
+            </div>
+            :
+            <div>Please sign in to modify enrollment</div>
+          }
         </div>
         <div>
           <h1>Classes</h1>
@@ -220,7 +261,11 @@ class App extends React.Component {
                     return (
                       <div>
                         <li key={stud.id}>{stud.name}, age:{stud.age}</li>
-                        <button onClick={() => this.removeStudent(stud.id)}>Remove Student</button>
+                        {this.state.user ?
+                          <button onClick={() => this.removeStudent(stud.id)}>Remove Student</button>
+                          :
+                          <div></div>
+                        }
                       </div>
                     )
                   })}</li>
