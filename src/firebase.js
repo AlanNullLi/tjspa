@@ -1,7 +1,11 @@
 import firebase from 'firebase';
 
+require('dotenv').config()
+
+const apiKey = process.env.REACT_APP_API_KEY;
+
 var firebaseConfig = {
-    apiKey: "AIzaSyAEmiSP-FfHyRw1u1CHCd8v2QmH1UpSpnU",
+    apiKey: apiKey,
     authDomain: "launch-tj-spa.firebaseapp.com",
     databaseURL: "https://launch-tj-spa.firebaseio.com",
     projectId: "launch-tj-spa",
