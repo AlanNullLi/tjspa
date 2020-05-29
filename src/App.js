@@ -1,110 +1,30 @@
 import React from 'react';
 import './App.css';
 import firebase, { auth, provider } from './firebase.js';
-import { Input, Card } from 'antd';
+import EnrollForm from './Components/EnrollForm.js';
+import AddTeacher from './Components/AddTeacher.js';
+import AddClass from './Components/AddClass.js';
+import LoginForm from './Components/LoginForm';
+import Classes from './Components/Classes.js';
+import AddAdmin from './Components/AddAdmin';
 
 //student will have a name, age, and class field
 //teachers will have a name and class
 //classes will be displayed to show the specific teacher and students with the specific class 
 //students will have a drop down to show age and other info
-//
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentName: '',
-      currentAge: '',
-      currentClass: '',
-      newTeacherN: '',
-      newTeacherC: '',
-      newClass: '',
       students: [],
       teachers: [],
       classes: [],
       user: null,
     }
-    //I think these all need to be binded since I am writing methods like normal java and no arrows
-    this.handleInput = this.handleInput.bind(this);
-    this.handleEnroll = this.handleEnroll.bind(this);
-    this.handleAddTeacher = this.handleAddTeacher.bind(this);
-    this.handleAddClass = this.handleAddClass.bind(this);
-    this.login = this.login.bind(this);
-    this.logout = this.logout.bind(this);
   }
 
-  //handles the input and assigns to state
-  handleInput(e) {
-    this.setState({
-      [e.target.name]: e.target.value
-    });
-  }
-  //adds student to firebase with a name age class fields
-  handleEnroll(e) {
-    e.preventDefault();
-    const studentRef = firebase.database().ref('students')
-    const student = {
-      name: this.state.currentName,
-      age: this.state.currentAge,
-      class: this.state.currentClass,
-    }
-    studentRef.push(student)
-    this.setState({
-      currentAge: '',
-      currentClass: '',
-      currentName: '',
-    })
-  }
-  //adds teacher to firebase with a name and class field
-  handleAddTeacher(e) {
-    e.preventDefault();
-    const teacherRef = firebase.database().ref('teachers')
-    const teacher = {
-      name: this.state.newTeacherN,
-      class: this.state.newTeacherC,
-    }
-    teacherRef.push(teacher);
-    this.setState({
-      newTeacherN: '',
-      newTeacherC: '',
-    })
-  }
-  //adds a class to firebase
-  handleAddClass(e) {
-    e.preventDefault();
-    const classRef = firebase.database().ref('classes')
-    const course = { className: this.state.newClass }
-    classRef.push(course);
-    this.setState({ newClass: '' })
-  }
-  //removes student from firebase database
-  removeStudent(studID) {
-    const studentRef = firebase.database().ref('/students/' + studID.toString())
-    studentRef.remove()
-  }
-
-  returnTeacher(className) {
-    //checks if teachers isnt empty
-    if (this.state.teachers !== null) {
-      //makes an array of teacher that has the class, could have multiple but Im only taking one
-      const teacher = this.state.teachers.filter(teacher => teacher.class === className)[0]
-      //as long as the teacher isnt undefined it will return the teacher name
-      if (teacher !== undefined) {
-        return teacher.name
-      } else {
-        //tells user to assign a teacher to this class first
-        return 'Please assign this class a teacher'
-      }
-    }
-  }
-  returnStudents(className) {
-
-    if (this.state.students !== null) {
-      return this.state.students.filter(student => student.class === className)
-    }
-  }
-
-  login() {
+  login = () => {
     auth.signInWithPopup(provider)
       .then((result) => {
         const user = result.user;
@@ -113,7 +33,7 @@ class App extends React.Component {
         })
       })
   }
-  logout() {
+  logout = () => {
     auth.signOut()
       .then(() => {
         this.setState({
@@ -186,65 +106,24 @@ class App extends React.Component {
   render() {
 
     return (
-      <div className='app'>
-        <header>Welcome to Thomas Jefferson Elementary!</header>
+      <div className='App'>
+        <h1>Welcome to Thomas Jefferson Elementary!</h1>
         <div>
-          <h6>Log in here</h6>
           {this.state.user ?
             <button onClick={this.logout}>Log out</button>
             :
-            <button onClick={this.login}>Log in</button>
+            <div>
+              <h4>Super log in here</h4>
+              <button onClick={this.login}>Log in</button>
+            </div>
           }
         </div>
         <div>
           {this.state.user ?
             <div>
-              Enroll New Student
-              <form onSubmit={this.handleEnroll}>
-                <Input
-                  name='currentName'
-                  placeholder='enter student name'
-                  value={this.state.currentName}
-                  onChange={this.handleInput}
-                />
-                <Input
-                  name="currentAge"
-                  placeholder='enter student age'
-                  value={this.state.currentAge}
-                  onChange={this.handleInput}
-                />
-                <Input
-                  name="currentClass"
-                  placeholder='assigned class'
-                  value={this.state.currentClass}
-                  onChange={this.handleInput}
-                />
-                <button >Enroll Student</button>
-              </form>
-              <form onSubmit={this.handleAddTeacher}>
-                <Input
-                  name='newTeacherN'
-                  placeholder='new teacher name'
-                  value={this.state.newTeacherN}
-                  onChange={this.handleInput}
-                />
-                <Input
-                  name='newTeacherC'
-                  placeholder="teacher's class"
-                  value={this.state.newTeacherC}
-                  onChange={this.handleInput}
-                />
-                <button>Add New Teacher</button>
-              </form>
-              <form onSubmit={this.handleAddClass}>
-                <Input
-                  name='newClass'
-                  placeholder='new class'
-                  value={this.state.newClass}
-                  onChange={this.handleInput}
-                />
-                <button>Add New Class</button>
-              </form>
+              <AddClass />
+              <AddTeacher />
+              <EnrollForm />
             </div>
             :
             <div>Please sign in to modify enrollment</div>
@@ -252,27 +131,12 @@ class App extends React.Component {
         </div>
         <div>
           <h1>Classes</h1>
-          {this.state.classes.map(course => {
-            return (
-              <Card title={course.className} style={{}}>
-                <p>{this.returnTeacher(course.className)}</p>
-                <ul>
-                  <li>{this.returnStudents(course.className).map(stud => {
-                    return (
-                      <div>
-                        <li key={stud.id}>{stud.name}, age:{stud.age}</li>
-                        {this.state.user ?
-                          <button onClick={() => this.removeStudent(stud.id)}>Remove Student</button>
-                          :
-                          <div></div>
-                        }
-                      </div>
-                    )
-                  })}</li>
-                </ul>
-              </Card>
-            )
-          })}
+          <Classes
+            students={this.state.students}
+            teachers={this.state.teachers}
+            classes={this.state.classes}
+            user={this.state.user}
+          />
         </div>
       </div>
     );

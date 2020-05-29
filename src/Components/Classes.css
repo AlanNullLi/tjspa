@@ -1,0 +1,19 @@
+
+.Classes {
+    display: inline-block;
+}
+
+.ClassBody {
+    display: inline-block;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    vertical-align: top;
+}
+
+.Card {
+    margin: 0 20px;
+}
+
+p {
+    font-size: 20px;
+}

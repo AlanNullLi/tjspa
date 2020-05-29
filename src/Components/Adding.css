@@ -1,0 +1,27 @@
+
+.EnrollForm {
+    padding: 10px;
+    
+}
+.AddTeacher {
+    padding: 10px;
+}
+.AddClass {
+    padding: 10px;
+}
+
+#form {
+    
+}
+
+#form input {
+    height: 20px;
+    border: 1;
+    border-radius: 10px;
+}
+
+#form button {
+    height: 20px;
+    border: 1;
+    border-radius: 10px;
+}
