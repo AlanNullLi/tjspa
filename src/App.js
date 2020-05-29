@@ -113,7 +113,7 @@ class App extends React.Component {
             <button onClick={this.logout}>Log out</button>
             :
             <div>
-              <h4>Super log in here</h4>
+              <h4>Admin log in here</h4>
               <button onClick={this.login}>Log in</button>
             </div>
           }

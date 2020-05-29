@@ -36,9 +36,13 @@ class Classes extends React.Component {
                 return (
                     <div>
                         {teacher.name}
-                        <Button
-                            onClick={() => this.removeTeacher(teacher.id)}
-                        >Remove</Button>
+                        {this.props.user ?
+                            <Button
+                                onClick={() => this.removeTeacher(teacher.id)}
+                            >Remove</Button>
+                            :
+                            <div></div>
+                        }
                     </div>
                 )
             } else {
@@ -61,9 +65,13 @@ class Classes extends React.Component {
                         <div className='ClassBody'>
                             <Card className='Card'>
                                 <h2>{course.className}</h2>
-                                <Button
-                                    onClick={() => this.removeClass(course.id)}
-                                >Remove</Button>
+                                {this.props.user ?
+                                    <Button
+                                        onClick={() => this.removeClass(course.id)}
+                                    >Remove</Button>
+                                    :
+                                    <div></div>
+                                }
                                 <p>{this.returnTeacher(course.className)}</p>
                                 {this.returnStudents(course.className).map(stud => {
                                     return (
