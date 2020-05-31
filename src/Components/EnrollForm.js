@@ -39,39 +39,41 @@ class EnrollForm extends React.Component {
 
     render() {
         return (
-
             <div className='EnrollForm'>
-                Enroll New Student
+                <b>Enroll New Student</b>
                 <Form id='form'>
-                    <Input
-                        name='currentName'
-                        placeholder='enter student name'
-                        value={this.state.currentName}
-                        onChange={this.handleInput}
-                    />
-                    <Input
-                        name="currentAge"
-                        placeholder='enter student age'
-                        value={this.state.currentAge}
-                        onChange={this.handleInput}
-                    />
-                    <Input
-                        name="currentClass"
-                        placeholder='assigned class'
-                        value={this.currentClass}
-                        onChange={this.handleInput}
-                    />
+                    <Form.Item>
+                        <Input
+                            name='currentName'
+                            placeholder='enter student name'
+                            value={this.state.currentName}
+                            onChange={this.handleInput}
+                        />
+                    </Form.Item>
+                    <Form.Item>
+                        <Input
+                            name="currentAge"
+                            placeholder='enter student age'
+                            value={this.state.currentAge}
+                            onChange={this.handleInput}
+                        />
+                    </Form.Item>
+                    <Form.Item>
+                        <Input
+                            name="currentClass"
+                            placeholder='assigned class'
+                            value={this.currentClass}
+                            onChange={this.handleInput}
+                        />
+                    </Form.Item>
                     <Button
                         type='submit'
                         onClick={this.handleEnroll}
                     >Enroll Student</Button>
                 </Form>
             </div>
-
         )
     }
-
-
 }
 
 export default EnrollForm;

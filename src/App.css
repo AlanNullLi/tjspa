@@ -1,6 +1,29 @@
 .App {
   text-align: center;
-  margin: 20px;
 }
 
+.Head {
+  /* background-color: rgba(28, 132, 230, 0.973); */
+  padding-bottom: 20px;
+  font-size: 30px;
+}
 
+.Pic {
+  background-image: url('http://p2cdn4static.sharpschool.com/UserFiles/Servers/Server_1057363/Image/Custom-Banner/TJES.jpg');
+  background-size: cover;
+  height: 600px;
+}
+
+.Break {
+  height: 110px;
+  background-color: rgba(28, 132, 230, 0.973);
+}
+
+.InputComps {
+  display: inline-block;
+  margin-top: 30px;
+}
+
+.Inputs {
+  display: flex;
+}

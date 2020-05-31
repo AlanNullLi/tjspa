@@ -4,9 +4,10 @@ import firebase, { auth, provider } from './firebase.js';
 import EnrollForm from './Components/EnrollForm.js';
 import AddTeacher from './Components/AddTeacher.js';
 import AddClass from './Components/AddClass.js';
-import LoginForm from './Components/LoginForm';
 import Classes from './Components/Classes.js';
-import AddAdmin from './Components/AddAdmin';
+import Header from './Components/Header.js';
+import Footer from './Components/Footer.js'
+import { Button } from 'antd';
 
 //student will have a name, age, and class field
 //teachers will have a name and class
@@ -107,26 +108,31 @@ class App extends React.Component {
 
     return (
       <div className='App'>
-        <h1>Welcome to Thomas Jefferson Elementary!</h1>
-        <div>
-          {this.state.user ?
-            <button onClick={this.logout}>Log out</button>
-            :
-            <div>
-              <h4>Admin log in here</h4>
-              <button onClick={this.login}>Log in</button>
-            </div>
-          }
+        <div className='Pic'>
+          <div className='Head'>
+            <Header />
+            {this.state.user ?
+              //if have time move this to separate component and add a username and password login
+              //to store in firebase
+              <Button onClick={this.logout}>Log out</Button>
+              :
+              <div>
+                <Button onClick={this.login}>Log in</Button>
+                <h5 style={{ color: 'white' }}>Admin log in here</h5>
+              </div>
+            }
+          </div>
         </div>
-        <div>
+        <div className='Break'>   </div>
+        <div className='InputComps'>
           {this.state.user ?
-            <div>
+            <div className='Inputs'>
               <AddClass />
               <AddTeacher />
               <EnrollForm />
             </div>
             :
-            <div>Please sign in to modify enrollment</div>
+            <h1 style={{ paddingBottom: 30 }}>Please sign in to view and modify enrollment</h1>
           }
         </div>
         <div>
@@ -138,6 +144,7 @@ class App extends React.Component {
             user={this.state.user}
           />
         </div>
+        <Footer />
       </div>
     );
   }

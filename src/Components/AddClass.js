@@ -29,18 +29,22 @@ class AddClass extends React.Component {
     render() {
         return (
             <div className='AddClass'>
-                Add New Class
+                <b>Add New Class</b>
                 <Form id='form'>
-                    <Input
-                        name='newClass'
-                        placeholder='new class'
-                        value={this.state.newClass}
-                        onChange={this.handleInput}
-                    />
-                    <Button
-                        type='submit'
-                        onClick={this.handleAddClass}
-                    >Add</Button>
+                    <Form.Item>
+                        <Input
+                            name='newClass'
+                            placeholder='new class'
+                            value={this.state.newClass}
+                            onChange={this.handleInput}
+                        />
+                    </Form.Item>
+                    <Form.Item>
+                        <Button
+                            type='submit'
+                            onClick={this.handleAddClass}
+                        >Add</Button>
+                    </Form.Item>
                 </Form>
             </div>
         )

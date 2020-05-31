@@ -38,20 +38,24 @@ class AddTeacher extends React.Component {
 
         return (
             <div className='AddTeacher'>
-                Add New Teacher
+                <b>Add New Teacher</b>
                 <Form id='form'>
-                    <Input
-                        name='newTeacherN'
-                        placeholder='new teacher name'
-                        value={this.state.newTeacherN}
-                        onChange={this.handleInput}
-                    />
-                    <Input
-                        name='newTeacherC'
-                        placeholder="teacher's class"
-                        value={this.state.newTeacherC}
-                        onChange={this.handleInput}
-                    />
+                    <Form.Item>
+                        <Input
+                            name='newTeacherN'
+                            placeholder='new teacher name'
+                            value={this.state.newTeacherN}
+                            onChange={this.handleInput}
+                        />
+                    </Form.Item>
+                    <Form.Item>
+                        <Input
+                            name='newTeacherC'
+                            placeholder="teacher's class"
+                            value={this.state.newTeacherC}
+                            onChange={this.handleInput}
+                        />
+                    </Form.Item>
                     <Button
                         type='submit'
                         onClick={this.handleAddTeacher}

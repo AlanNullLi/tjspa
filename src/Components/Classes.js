@@ -34,15 +34,19 @@ class Classes extends React.Component {
             //as long as the teacher isnt undefined it will return the teacher name
             if (teacher !== undefined) {
                 return (
-                    <div>
-                        {teacher.name}
-                        {this.props.user ?
-                            <Button
-                                onClick={() => this.removeTeacher(teacher.id)}
-                            >Remove</Button>
-                            :
-                            <div></div>
-                        }
+                    <div className='teacher'>
+                        <Card
+                            title={teacher.name}
+                            extra={
+                                this.props.user ?
+                                    //shows button if user is logged in as super
+                                    <Button
+                                        onClick={() => this.removeTeacher(teacher.id)}
+                                    >Remove</Button>
+                                    :
+                                    <div></div>
+                            }
+                        ></Card>
                     </div>
                 )
             } else {
@@ -52,39 +56,53 @@ class Classes extends React.Component {
         }
     }
     returnStudents(className) {
-
+        //only returns students in the inputted class
         if (this.props.students !== null) {
             return this.props.students.filter(student => student.class === className)
         }
     }
     render() {
         return (
+            //maps through classes in state and returns a card for every class
+            //then uses return teacher to return the teacher that corresponds with the class
+            //could return multiple but im just setting it up to return 1
+            //then uses return students to get students who are in the class and maps through all of those 
+            //in a card
             <div className='Classes'>
                 {this.props.classes.map(course => {
                     return (
                         <div className='ClassBody'>
-                            <Card className='Card'>
-                                <h2>{course.className}</h2>
-                                {this.props.user ?
-                                    <Button
-                                        onClick={() => this.removeClass(course.id)}
-                                    >Remove</Button>
-                                    :
-                                    <div></div>
+                            <Card
+                                id='card'
+                                title={course.className}
+                                extra={
+                                    //shows button if the user is logged in as super
+                                    this.props.user ?
+                                        <Button
+                                            onClick={() => this.removeClass(course.id)}
+                                        >Remove</Button>
+                                        :
+                                        <div></div>
                                 }
+                            >
                                 <p>{this.returnTeacher(course.className)}</p>
                                 {this.returnStudents(course.className).map(stud => {
                                     return (
                                         <div >
-                                            <li key={stud.id} style={{ marginBottom: 5 }}>{stud.name}, age:{stud.age}</li>
-                                            {this.props.user ?
-                                                <Button
-                                                    onClick={() => this.removeStudent(stud.id)}
-                                                    style={{ marginLeft: 20 }}
-                                                >Remove</Button>
-                                                :
-                                                <div></div>
-                                            }
+                                            <Card
+                                                type='inner'
+                                                title={stud.name}
+                                                extra={this.props.user ?
+                                                    //shows button if user is logged in as super
+                                                    <Button
+                                                        onClick={() => this.removeStudent(stud.id)}
+                                                        style={{ marginLeft: 20 }}
+                                                    >Remove</Button>
+                                                    :
+                                                    <div></div>}
+                                            >
+                                                <p>Age: {stud.age}</p>
+                                            </Card>
                                         </div>
                                     )
                                 })}
